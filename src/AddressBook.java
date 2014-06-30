@@ -1,11 +1,13 @@
 import java.util.Date;
 
 public class AddressBook implements Comparable<AddressBook> 
-{ 
+{ 	
+
 	private String name;
 	private String sex;
 	private Date dateOfBirth;
-
+    private Gender gender;
+	
 	public AddressBook(String name, String sex, Date dateOfBirth) 
 	{
 		setName(name);
@@ -31,6 +33,14 @@ public class AddressBook implements Comparable<AddressBook>
 	public void setSex(String sex) 
 	{
 		this.sex = sex.trim().toUpperCase();
+		if (this.sex.toString().equals("MALE"))
+		{
+			this.gender = Gender.MALE;
+		}
+		else 
+		{
+			this.gender = Gender.FEMALE;
+		}
 	}
 	
 	public Date getDateOfBirth() 
@@ -55,6 +65,11 @@ public class AddressBook implements Comparable<AddressBook>
 		}
 	}
 	
+	public Gender getGender()
+	{
+		return this.gender;
+	}
+	
 	 public int compareTo(AddressBook thisAddressBook)
 	 {
 		 if (this.dateOfBirth.after(thisAddressBook.dateOfBirth)) 
@@ -70,6 +85,12 @@ public class AddressBook implements Comparable<AddressBook>
 	     {
 	            return -1;
 	     }
+	 }
+	 
+	 @Override
+	 public String toString()
+	 {
+		 return this.name.toString();
 	 }
 }
 

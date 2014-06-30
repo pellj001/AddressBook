@@ -13,10 +13,14 @@ public class AddressBookReader
 	{
 		int maleCount;
 		ArrayList<AddressBook> addressBookList = new ArrayList<AddressBook>();
+		
 		addressBookList = readAddressBook();
+		
+		// get the male count
 		maleCount = getMaleCount(addressBookList);
 		System.out.println("Male count is " + Integer.toString(maleCount));
 
+		// sort by date of birth and get the first element
 		if (addressBookList.size() == 0)
 		{
 			System.out.print("No persons found! ");
@@ -28,13 +32,12 @@ public class AddressBookReader
 			System.out.println("Oldest person is " + oldestAddressBook.getName());
 		}
 		
-		int addressBook1 = searchAddressBookByName(addressBookList, "Bill McKnight");
-		int addressBook2 = searchAddressBookByName(addressBookList, "Paul Robinson");
+		// get the 2 persons and calculate age difference
+		AddressBook addressBookObj1 = searchAddressBookByName(addressBookList, "Bill McKnight");
+		AddressBook addressBookObj2 = searchAddressBookByName(addressBookList, "Paul Robinson");
 		
-		if ((addressBook1 >= 0) && (addressBook2 >= 0))
+		if ((addressBookObj1 != null) && (addressBookObj2 != null))
 		{
-			AddressBook addressBookObj1 = addressBookList.get(addressBook1);
-			AddressBook addressBookObj2 = addressBookList.get(addressBook2);
 			Date dateOfBirth1 = addressBookObj1.getDateOfBirth();
 			Date dateOfBirth2 = addressBookObj2.getDateOfBirth();
 			long days = daysBetween(dateOfBirth1, dateOfBirth2);
@@ -61,6 +64,7 @@ public class AddressBookReader
 			
 			    while (line != null) 
 			    {
+			    	// assume no commas used in address book
 			    	String [] addressBookLine = line.split(",");
                     String personName = addressBookLine[0];
                     String personSex = addressBookLine[1];
@@ -74,7 +78,7 @@ public class AddressBookReader
 					} 
 					catch (ParseException e) 
 					{
-						
+						System.out.println("Error while reading file.  Unable to read date of birth. " + e.getMessage().toString());
 					}
                     
                     addressBookList.add(new AddressBook(personName, personSex, personDateOfBirth));
@@ -99,7 +103,7 @@ public class AddressBookReader
 	    for(int i=0; i < addressBookList.size(); i++)
 	    {
 	    	thisAddressBook = addressBookList.get(i);
-	    	if (thisAddressBook.isMale())
+	    	if (thisAddressBook.getGender().equals(Gender.MALE))
 	    	{
 	    		returnResult++;
 	    	}
@@ -107,17 +111,17 @@ public class AddressBookReader
 	    return returnResult;
 	}
 	
-	public static int searchAddressBookByName(ArrayList<AddressBook> addressBookList, String AddressBookName)
+	public static AddressBook searchAddressBookByName(ArrayList<AddressBook> addressBookList, String AddressBookName)
 	{
 		for(int i =0; i<addressBookList.size(); i++)
 		{
             AddressBook thisAddressBook = addressBookList.get(i);
             if (thisAddressBook.getName().equals(AddressBookName.toString()))
             {
-            	return i;
+            	return thisAddressBook;
             }		
 		}
-		return -1;
+		return null;
 	}
 	
     public static long daysBetween(Date d1, Date d2)
